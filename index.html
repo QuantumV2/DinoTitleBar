@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Press Spacebar!</title>
+</head>
+<body>
+    <h1 style="text-align: center;">Look at the Titlebar.</h1>
+    <script>
+        const titleElem = document.querySelector("title");
+        var started = false
+        var dinoEmoji = "🦖"
+        var cactusEmoji = "🌵"
+        var interval = undefined
+        var interval1 = undefined
+        var gameArr = ["-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"];
+        var cactusReachedStart = false
+        
+        document.body.onkeyup = function(e) {
+            if (e.key == " " ||
+                e.code == "Space" ||     
+                e.keyCode == 32     
+            ) {
+                if(!started)
+                {
+                    started = true
+                    gameLoop()
+                    interval = setInterval(() => gameLoop(), 700);
+                    interval1 = setInterval(() => createCacti(), 500);
+                }
+                else
+                {
+                    gameArr[0] = "-"
+                    cactusReachedStart = false
+                    gameLoop()
+                }
+            }
+        }
+
+        function createCacti(){
+            var rand = Math.floor((Math.random()) * 50)
+            var rand1 = Math.floor((Math.random()) * 30)
+            if(rand1 <= Math.floor(rand / 2)) {
+                gameArr[gameArr.length - 1] = cactusEmoji;
+            }
+        }
+
+        function gameLoop(){
+            titleElem.innerText = dinoEmoji + gameArr.join('');
+            for(var i = 0; i < gameArr.length; i++){
+                if(gameArr[i] == cactusEmoji){
+                    gameArr[i] = "-"
+                    if(i > 0){
+                        gameArr[i - 1] = cactusEmoji
+                    }
+                    else {
+                        cactusReachedStart = true
+                        return
+                    }
+                }
+            }
+            if(cactusReachedStart){
+                if(interval != undefined){
+                    titleElem.innerText = "Game Over"
+                    clearInterval(interval)
+                    clearInterval(interval1)
+                }
+                gameArr = ["-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"];
+                started = false;
+            }
+        }
+    </script>
+    <style>
+        body{
+            background-color: black;
+            color: white;
+        }
+    </style>
+</body>
+</html>
