@@ -6,9 +6,13 @@
     <title>Press Spacebar!</title>
 </head>
 <body>
-    <h1 style="text-align: center;">Look at the Titlebar.</h1>
+    <h1>Look at the Titlebar.</h1>
+    <h3>... Or just look around this page</h3>
+    <a id="score">Score: 0</a>
+    
     <script>
         const titleElem = document.querySelector("title");
+        const scoreElem = document.getElementById("score");
         var started = false
         var dinoEmoji = "🦖"
         var cactusEmoji = "🌵"
@@ -16,6 +20,7 @@
         var interval1 = undefined
         var gameArr = ["-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"];
         var cactusReachedStart = false
+        var score = 0
         
         document.body.onkeyup = function(e) {
             if (e.key == " " ||
@@ -27,13 +32,19 @@
                     started = true
                     gameLoop()
                     interval = setInterval(() => gameLoop(), 700);
-                    interval1 = setInterval(() => createCacti(), 500);
+                    interval1 = setInterval(() => createCacti(), 1000);
                 }
                 else
                 {
-                    gameArr[0] = "-"
-                    cactusReachedStart = false
-                    gameLoop()
+                    if(gameArr[0] == cactusEmoji || gameArr[1] == cactusEmoji)
+                    {
+                        gameArr[0] = "-"
+                        gameArr[1] = "-"
+                        score += 1;
+                        cactusReachedStart = false
+                        gameLoop()
+                        gameLoop()
+                    }
                 }
             }
         }
@@ -48,6 +59,7 @@
 
         function gameLoop(){
             titleElem.innerText = dinoEmoji + gameArr.join('');
+            scoreElem.innerText = "Score: " + score;
             for(var i = 0; i < gameArr.length; i++){
                 if(gameArr[i] == cactusEmoji){
                     gameArr[i] = "-"
@@ -73,6 +85,8 @@
     </script>
     <style>
         body{
+            font-size: x-large;
+            text-align: center;
             background-color: black;
             color: white;
         }
